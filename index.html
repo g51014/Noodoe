@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Noodoe Test</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- 引入 Babel -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+    class Test extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {buttonDisplay:'inline-block',infoDisplay:'none',loginDisplay:'block',listDisplay:'none',userInfo:{name:'',email:'',timezone:'',code:''},errorInfo:{error:false,errorInfo:''},list:[],show:[]};
+        this.Login.bind(this);
+        this.Send.bind(this);
+        this.Update.bind(this);
+        this.Add.bind(this);
+        this.Delete.bind(this);
+        this.ShowComplete.bind(this);
+      }
+      render()
+      {
+        var list = [];
+        for(var i=0;i<this.state.show.length;i++)
+        {
+          list.push(
+            <li style={{color:this.state.show[i].color}} key={i}>{this.state.show[i].title}<button style={{display:this.state.buttonDisplay}} onClick={this.Delete.bind(this,i)} className='todo-button'>D</button><button style={{display:this.state.buttonDisplay}} onClick={this.Complete.bind(this,i)} className='todo-button'>C</button></li>
+          );
+        }
+        return(
+          <div id='menu'>
+            <div id='nav'>
+              <ul style={{display:'flex',listStyleType:'none',paddingLeft:30}}>
+                <li style={{marginLeft:10,marginRight:10}}><a style={{textDecoration:'none',color:'black',fontSize:25,fontFamily:'sans-serif'}} href="###" onClick={this.ToLogin.bind(this)}>Login</a></li>
+                <li style={{marginLeft:10,marginRight:10}}><a style={{textDecoration:'none',color:'black',fontSize:25,fontFamily:'sans-serif'}} href="###" onClick={this.ToList.bind(this)}>Todolist</a></li>
+              </ul>
+            </div>
+            <div id='body'>
+              <div id='todolist' style={{display:this.state.listDisplay,fontFamily:'sans-serif'}}>
+                <input id='list-title' type="text" style={{marginBottom:8,marginLeft:10,width:245,height:23}}  onChange={e => this.onTodoChangeList(e.target.value)}/>
+                <ul style={{margin:0,display:'flex',listStyleType:'none',paddingLeft:0}}>
+                  <li onClick={this.Add.bind(this)} style={{margin:10}}><button className='button'>Add</button></li>
+                </ul>
+                <ul id="list" style={{listStyleType:'none',fontSize:25,paddingLeft:10}}>
+                  {list}
+                </ul>
+                <ul style={{margin:0,display:'flex',listStyleType:'none',paddingLeft:0}}>
+                  <li onClick={this.ShowAll.bind(this)} style={{margin:10}}><button className='button'>All</button></li>
+                  <li onClick={this.ShowActive.bind(this)} style={{margin:10}}><button className='button'>Active</button></li>
+                  <li onClick={this.ShowComplete.bind(this)} style={{margin:10}}><button className='button'>Complete</button></li>
+                </ul>
+              </div>
+              <form id = 'login' style={{display:this.state.loginDisplay}}>
+                <label style={{display:'block',margin:10,fontFamily:'sans-serif'}}>
+                  username:
+                  <input  id='username' type="text" placeholder='test2@qq.com'  style={{marginLeft:5,paddingLeft:5}} />
+                </label>
+                <label style={{display:'block',margin:10,fontFamily:'sans-serif'}}>
+                  password:
+                  <input style={{marginLeft:5,paddingLeft:5}} id="password" type="password" />
+                </label>
+                <input type='button'value='login' id='send' style={{marginLeft:220,display:'block'}}  onClick= {this.Send.bind(this)}/>
+              </form>
+              <ul id='info' style={{display:this.state.infoDisplay,listStyleType:'none',paddingLeft:10}}>
+                <li style={{marginBottom:10,fontFamily:'sans-serif'}}>Username: <span style={{marginLeft:5,textAlign:'center'}}>{this.state.userInfo.username}</span></li>
+                <li style={{marginBottom:10,fontFamily:'sans-serif'}}>Email: <span style={{marginLeft:5,textAlign:'center'}}>{this.state.userInfo.email}</span></li>
+                <li style={{marginBottom:10,fontFamily:'sans-serif'}}>Timezone: <input type="number" min='-12' max='14' step='0.5' style={{display:'inlineBlock',marginLeft:5,width:45,textAlign:'center'}} value={this.state.userInfo.timezone} onChange={e => this.onTodoChange(e.target.value)}/></li>
+                <li style={{marginBottom:10,fontFamily:'sans-serif'}}>Code: <span style={{marginLeft:5,textAlign:'center'}}>{this.state.userInfo.code}</span></li>
+              </ul>
+            </div>
+          </div>
+        );
+      }
+
+      ShowComplete()
+      {
+        var list = this.state.list;
+        var listTemp=[];
+        for(var i=0;i<list.length;i++)
+        {
+          (list[i].color=='rgb(101,221,155)')?listTemp.push(list[i]):console.log(list[i].color);
+        }
+        this.setState({show:listTemp,buttonDisplay:'none'});
+      }
+
+      ShowAll()
+      {
+        var listTemp = this.state.list;
+        this.setState({show:listTemp,buttonDisplay:'inline-block'});
+      }
+
+      ShowActive()
+      {
+        var list = this.state.list;
+        var listTemp=[];
+        for(var i=0;i<list.length;i++)
+        {
+          (list[i].color=='rgb(247,79,79)')?listTemp.push(list[i]):console.log(list[i].color);
+        }
+        this.setState({show:listTemp,buttonDisplay:'none'});
+      }
+
+      Complete(num)
+      {
+        var list = this.state.list;
+        list[num].color = 'rgb(101,221,155)';
+        this.setState({list:list});
+      }
+
+      Delete(num)
+      {
+        var list = this.state.list;
+        list.splice(num,1);
+        this.setState({list:list});
+      }
+
+      Add()
+      {
+        var list = this.state.list;
+        var todo = new Object();
+        var title = document.getElementById('list-title').value;
+        if(title != '')
+        {
+          todo.title = title;
+          todo.color = 'rgb(247,79,79)';
+          list.push(todo);
+          this.setState({list:list,show:list,buttonDisplay:'inline-block'});
+          console.log(this.state.buttonDisplay);
+        }
+      }
+
+      onTodoChange(value){
+        var userInfo = this.state.userInfo;
+        userInfo.timezone = value;
+        this.setState({userInfo:userInfo});
+        this.Update(this.state.userInfo.timezone,this.state.userInfo.objectId);
+      }
+
+      onTodoChangeList(value)
+      {
+        document.getElementById('list-title').value = value;
+      }
+
+      ToLogin()
+      {
+        this.setState({loginDisplay:'block',infoDisplay:'none',listDisplay:'none'});
+      }
+
+      ToList()
+      {
+        this.setState({loginDisplay:'none',infoDisplay:'none',listDisplay:'block'});
+      }
+
+      Send()
+      {
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+        this.Login(username,password);
+        console.log(username+''+password);
+      }
+
+      Update(timezone,objectId)
+      {
+        var url = 'https://watch-master-staging.herokuapp.com/api/users/'+objectId;
+        fetch(url,
+        {
+          method: 'POST',
+          headers:{
+            "X-Parse-Application-Id":"vqYuKPOkLQLYHhk4QTGsGKFwATT4mBIGREI2m8eD" ,
+            "X-Parse-REST-API-Key": "" ,
+            "X-Parse-Session-Token": "r:pnktnjyb996sj4p156gjtp4im" ,
+            "Content-Type" : "application/json"
+          },
+          body: JSON.stringify(
+          {
+            timezone: timezone
+          }
+          )
+        })
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) =>{
+          console.error(error);
+        });
+      }
+
+      Login(username,password)
+      {
+        var url = 'https://watch-master-staging.herokuapp.com/api/login';
+        fetch(url,
+        {
+          method: 'POST',
+          headers:{
+            "X-Parse-Application-Id":"vqYuKPOkLQLYHhk4QTGsGKFwATT4mBIGREI2m8eD" ,
+            "X-Parse-REST-API-Key": "" ,
+            "X-Parse-Revocable-Session": "1" ,
+            "Content-Type" : "application/json"
+          },
+          body: JSON.stringify(
+          {
+            username: username, //test2@qq.com
+            password: password //test1234qq
+          }
+          )
+        })
+        .then((response) => response.json())
+        .then((response) => {
+          var num = Object.getOwnPropertyNames(response).length;
+          if(num >2)
+          {
+            this.setState({userInfo:response,errorInfo:{error:false}});
+          }
+          else {
+            this.setState({errorInfo:{error:true,errorInfo:response.error}});
+          }
+          if(!this.state.errorInfo.error) this.setState({infoDisplay:'block',loginDisplay:'none'});
+          else alert(this.state.errorInfo.errorInfo);
+          console.log(response);
+        })
+        .catch((error) =>{
+          console.error(error);
+        });
+      }
+    }
+
+      ReactDOM.render(
+        <Test/>,
+        document.getElementById('root')
+      );
+
+    </script>
+  </body>
+</html>

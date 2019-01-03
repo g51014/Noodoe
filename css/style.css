@@ -1,0 +1,33 @@
+#username
+{
+  margin-right: 10px;
+}
+
+#send
+{
+  margin-left: 10px;
+}
+
+
+.button,.todo-button
+{
+  background-color: white;
+  border-radius: 10px;
+  border-width: 1px;
+  border-color: black;
+  color:black;
+  font-size: 15px;
+  font-family: sans-serif;
+  width: 78px;
+}
+
+.todo-button
+{
+  margin-left: 15px;
+  width:23px;
+}
+
+.button:hover,.todo-button:hover
+{
+  background-color: rgb(216,214,214);
+}
